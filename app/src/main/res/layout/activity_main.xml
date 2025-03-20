@@ -103,13 +103,24 @@
         app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <TextView
-        android:id="@+id/txtCuenta"
+        android:id="@+id/txtIniciar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
+        android:text="Iniciar sesión »"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputPassword" />
+
+    <TextView
+        android:id="@+id/txtCuenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="¿No tienes cuenta? Regístrate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputPassword"
+        app:layout_constraintTop_toBottomOf="@id/txtIniciar"
         android:layout_marginLeft="60dp"
         android:textSize="18dp"/>
 
@@ -118,12 +129,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="80dp"
         android:text="aquí"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/txtCuenta"
-        app:layout_constraintTop_toBottomOf="@id/inputPassword"
+        app:layout_constraintTop_toBottomOf="@id/txtIniciar"
         android:layout_marginRight="76dp"
         android:textColor="@color/blue"/>
 

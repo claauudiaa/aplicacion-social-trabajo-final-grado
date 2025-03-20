@@ -57,7 +57,7 @@
         android:text="Nombre de usuario"
         android:textSize="20dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/registroTitulo" />
 
@@ -101,10 +101,10 @@
         app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
     <TextView
-        android:id="@+id/txtDni"
+        android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DNI"
+        android:text="Contraseña"
         android:textSize="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
@@ -112,30 +112,55 @@
         app:layout_constraintTop_toBottomOf="@id/inputEmail" />
 
     <EditText
-        android:id="@+id/inputDni"
+        android:id="@+id/inputPassword"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:background="@drawable/edit_text_background"
         android:paddingLeft="10dp"
         android:ems="10"
-        android:hint="Ingrese su DNI"
+        android:hint="Ingrese su contraseña"
         android:inputType="textEmailAddress"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDni" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <TextView
-        android:id="@+id/txtSiguiente"
+        android:id="@+id/txtRePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Siguiente »"
+        android:text="Repetir contraseña"
+        android:textSize="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputPassword" />
+
+    <EditText
+        android:id="@+id/inputRePassword"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edit_text_background"
+        android:paddingLeft="10dp"
+        android:ems="10"
+        android:hint="Ingrese de nuevo su contraseña"
+        android:inputType="textEmailAddress"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtRePassword" />
+
+    <TextView
+        android:id="@+id/txtRegistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrar cuenta »"
         android:textColor="@color/blue"
-        android:textSize="23dp"
+        android:textSize="20dp"
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputDni" />
+        app:layout_constraintTop_toBottomOf="@id/inputRePassword" />
 
     <TextView
         android:id="@+id/txtCuenta"
@@ -146,7 +171,7 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="130dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputDni" />
+        app:layout_constraintTop_toBottomOf="@id/inputRePassword" />
 
     <TextView
         android:id="@+id/txtAqui"
@@ -160,6 +185,6 @@
         android:layout_marginRight="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/txtCuenta"
-        app:layout_constraintTop_toBottomOf="@id/inputDni" />
+        app:layout_constraintTop_toBottomOf="@id/inputRePassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
