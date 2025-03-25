@@ -79,18 +79,18 @@ public class dbConnection extends SQLiteOpenHelper {
         activities.add(new Activities("futbol", "Fútbol"));
 
         /*
-        activities.add(new Activities("voley.svg", "Vóley"));
-        activities.add(new Activities("escalada.svg", "Escalada"));
-        activities.add(new Activities("crossfit.svg", "Crossfit"));
-        activities.add(new Activities("patinaje.svg", "Patinaje"));
-        activities.add(new Activities("yoga.svg", "Yoga"));
-        activities.add(new Activities("baloncesto.svg", "Baloncesto"));
-        activities.add(new Activities("beisbol.svg", "Béisbol"));
-        activities.add(new Activities("gimnasio.svg", "Gimnasio"));
-        activities.add(new Activities("zumba.svg", "Zumba"));
-        activities.add(new Activities("rugby.svg", "Rugby"));
-        activities.add(new Activities("running.svg", "Running"));
-        activities.add(new Activities("comba.svg", "Saltar a la comba"));
+        activities.add(new Activities("voley", "Vóley"));
+        activities.add(new Activities("escalada", "Escalada"));
+        activities.add(new Activities("crossfit", "Crossfit"));
+        activities.add(new Activities("patinaje", "Patinaje"));
+        activities.add(new Activities("yoga", "Yoga"));
+        activities.add(new Activities("baloncesto", "Baloncesto"));
+        activities.add(new Activities("beisbol", "Béisbol"));
+        activities.add(new Activities("gimnasio", "Gimnasio"));
+        activities.add(new Activities("zumba", "Zumba"));
+        activities.add(new Activities("rugby", "Rugby"));
+        activities.add(new Activities("running", "Running"));
+        activities.add(new Activities("comba", "Saltar a la comba"));
         */
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -140,6 +140,8 @@ public class dbConnection extends SQLiteOpenHelper {
                 db.insert("grupos", null, values);
             }
         }
+
+        // Esto es para ver si había datos (borrar)
         Cursor c = db.rawQuery("SELECT * FROM grupos", null);
         if (c.moveToFirst()) {
             do {
@@ -150,6 +152,17 @@ public class dbConnection extends SQLiteOpenHelper {
         c.close();
 
         return groups;
+    }
+
+    public void addGroup(String Pzona, String Pfecha, String Phorario, String Pactividad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(zona, Pzona);
+        values.put(fecha, Pfecha);
+        values.put(horario, Phorario);
+        values.put(nameActividad, Pactividad);
+        db.insert("grupos", null, values);
+
     }
 
 }
