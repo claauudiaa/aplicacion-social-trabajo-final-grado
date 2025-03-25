@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     boolean resultado = db.verifyUser(email, password);
                     if (resultado) {
-                        Intent intent2 = new Intent(MainActivity.this, Inicio.class);
+                        Intent intent2 = new Intent(MainActivity.this, Home.class);
                         startActivity(intent2);
                         Toast.makeText(MainActivity.this, "Bienvenido a PlanMatch", Toast.LENGTH_SHORT).show();
                     } else {

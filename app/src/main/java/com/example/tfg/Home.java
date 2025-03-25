@@ -1,6 +1,7 @@
 package com.example.tfg;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,17 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class Inicio extends AppCompatActivity {
-
+public class Home extends AppCompatActivity {
     private dbConnection db;
     private ArrayList<Activities[]> actividadesEnPares;
-    private Adaptador adapter;
+    private AdapterActivities adapter;
     private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio);
+        setContentView(R.layout.activity_home);
 
         listView = findViewById(R.id.listview);
         db = new dbConnection(this, "PlanMatch", null, 1);
@@ -38,7 +38,7 @@ public class Inicio extends AppCompatActivity {
             actividadesEnPares.add(new Activities[]{a1, a2});
         }
 
-        adapter = new Adaptador(this, R.layout.entrada, actividadesEnPares) {
+        adapter = new AdapterActivities(this, R.layout.item_activities, actividadesEnPares) {
             @Override
             public void onEntrada(Object entrada, View view) {
                 Activities[] par = (Activities[]) entrada;
@@ -59,21 +59,22 @@ public class Inicio extends AppCompatActivity {
 
                 icono1.setImageResource(idImagen1);
                 icono2.setImageResource(idImagen2);
+
+                icono1.setOnClickListener(v -> {
+                    Intent intent = new Intent(Home.this, GroupsView.class);
+                    intent.putExtra("activity_name", act1.getNombre());
+                    startActivity(intent);
+                });
+
+                icono2.setOnClickListener(v -> {
+                    Intent intent = new Intent(Home.this, GroupsView.class);
+                    intent.putExtra("activity_name", act2.getNombre());
+                    startActivity(intent);
+                });
             }
         };
 
         listView.setAdapter(adapter);
-    }
 
-
-@SuppressLint("Range")
-    public void seeActivities() {
-        SQLiteDatabase db = this.db.getReadableDatabase();
-        String query = "SELECT * FROM actividades";
-        Cursor cursor = db.rawQuery(query, null);
-        while (cursor.moveToNext()) {
-            String imagen = cursor.getString(cursor.getColumnIndex("imagen"));
-            String nombre = cursor.getString(cursor.getColumnIndex("nombre"));
-        }
     }
 }

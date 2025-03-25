@@ -1,12 +1,21 @@
 package com.example.tfg;
 
 public class Activities {
-    public String img;
-    public String nombre;
+    private int id;
+    private String img;
+    private String nombre;
 
     public Activities(String img, String nombre) {
         this.img = img;
         this.nombre = nombre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getImg() {

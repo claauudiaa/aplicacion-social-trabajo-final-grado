@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import java.util.ArrayList;
 
-public abstract class Adaptador extends BaseAdapter {
+public abstract class AdapterActivities extends BaseAdapter {
     private ArrayList<?> entradas;
     private int R_layout_IdView;
     private Context contexto;
 
-    public Adaptador(Context contexto, int r_layout_IdView, ArrayList<?> entradas) {
+    public AdapterActivities(Context contexto, int r_layout_IdView, ArrayList<?> entradas) {
         this.contexto = contexto;
         R_layout_IdView = r_layout_IdView;
         this.entradas = entradas;

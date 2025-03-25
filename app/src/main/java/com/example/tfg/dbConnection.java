@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -18,7 +19,12 @@ public class dbConnection extends SQLiteOpenHelper {
     private static String passwordUsuarios = "password";
     private static String nombreActividades = "nombre";
     private static String nombreImagen = "imagen";
+    private static String zona = "zona";
+    private static String horario = "horario";
+    private static String fecha = "fecha";
+    private static String nameActividad = "actividad_nombre";
     private static ArrayList<Activities> activities;
+    private static ArrayList<Groups> groups;
 
     public dbConnection(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -32,12 +38,16 @@ public class dbConnection extends SQLiteOpenHelper {
         String queryActividades = "create table actividades(" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + nombreImagen + " TEXT, " + nombreActividades + " TEXT)";
         sqLiteDatabase.execSQL(queryActividades);
 
+        String queryGrupos = "create table grupos(" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + zona + " TEXT, " + horario + " TEXT, " + fecha + " TEXT, " + nameActividad + " TEXT)";
+        sqLiteDatabase.execSQL(queryGrupos);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS usuarios");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS actividades");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS grupos");
         onCreate(sqLiteDatabase);
 
     }
@@ -99,7 +109,47 @@ public class dbConnection extends SQLiteOpenHelper {
                 db.insert("actividades", null, values);
             }
         }
+
         return activities;
+    }
+
+    // Metodo que habrá que borrar/cambiar para solo añadir uno
+    public ArrayList<Groups> addGroups() {
+        groups = new ArrayList<>();
+        groups.add(new Groups("García Noblejas", "27 de marzo", "17:00-18:00", "Senderismo"));
+        groups.add(new Groups("Delicias", "10 de abril", "11:00-13:00", "Ciclismo"));
+        groups.add(new Groups("Alcobendas", "23 de abril", "15:00-16:30", "Ciclismo"));
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Comprobar si hay insertados datos en la base de datos (esto habrá que quitarlo)
+        String query = "SELECT COUNT(*) FROM grupos";
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+
+        if (count == 0) { // Insertar solo si la tabla está vacía, así evitamos superposición
+            for (int i = 0; i < groups.size(); i++) {
+                ContentValues values = new ContentValues();
+                values.put(zona, groups.get(i).getZona());
+                values.put(fecha, groups.get(i).getFecha());
+                values.put(horario, groups.get(i).getHorario());
+                values.put(nameActividad, groups.get(i).getName_activity());
+                db.insert("grupos", null, values);
+            }
+        }
+        Cursor c = db.rawQuery("SELECT * FROM grupos", null);
+        if (c.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String nombre = c.getString(c.getColumnIndex("actividad_nombre"));
+                Log.d("GRUPOS_EN_BD", "Grupo con actividad: " + nombre);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return groups;
     }
 
 }
