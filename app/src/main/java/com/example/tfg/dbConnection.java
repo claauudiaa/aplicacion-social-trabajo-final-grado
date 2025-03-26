@@ -165,5 +165,11 @@ public class dbConnection extends SQLiteOpenHelper {
 
     }
 
+    public void modifyProfile(String nombre, String email, String password, String emailAnterior) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE usuarios SET nombre = ?, email = ?, password = ? WHERE email = ?";
+        db.execSQL(query, new Object[]{nombre, email, password, emailAnterior});
+    }
+
 }
 

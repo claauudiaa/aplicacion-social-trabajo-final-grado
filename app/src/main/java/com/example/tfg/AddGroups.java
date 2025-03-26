@@ -22,6 +22,9 @@ public class AddGroups extends AppCompatActivity {
     private dbConnection db;
     private ImageView atras;
     private ImageView confirmar;
+    private ImageView home;
+    private ImageView recents;
+    private ImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class AddGroups extends AppCompatActivity {
         String activityName = getIntent().getStringExtra("activity_name");
         Log.d("DEBUG", "Nombre recibido por intent en agregar: " + activityName);
 
+        home = findViewById(R.id.imgCasa);
+        recents = findViewById(R.id.imgRecientes);
+        profile = findViewById(R.id.imgPerfil);
         zona = findViewById(R.id.inputZona);
         fecha = findViewById(R.id.inputFecha);
         hora = findViewById(R.id.inputHora);
@@ -58,6 +64,30 @@ public class AddGroups extends AppCompatActivity {
                 Toast.makeText(AddGroups.this, "Grupo creado correctamente", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(AddGroups.this, GroupsView.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddGroups.this, Home.class);
+                startActivity(intent);
+            }
+        });
+
+        recents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddGroups.this, Recents.class);
+                startActivity(intent);
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddGroups.this, Profile.class);
                 startActivity(intent);
             }
         });

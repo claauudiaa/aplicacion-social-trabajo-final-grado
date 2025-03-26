@@ -58,6 +58,10 @@ public class Register1 extends AppCompatActivity {
                     Users user = new Users(nombre, correo, password);
                     db.addUser(user);
 
+                    UserSession.nombre = nombre;
+                    UserSession.correo = correo;
+                    UserSession.password = password;
+
                     Toast.makeText(Register1.this, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(Register1.this, MainActivity.class);
                     startActivity(i);

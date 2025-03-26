@@ -54,18 +54,21 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/imgCasa"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/casa"
             android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/imgRecientes"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/reciente"
             android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/imgPerfil"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/usuario"

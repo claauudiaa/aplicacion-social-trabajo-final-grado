@@ -24,12 +24,18 @@ public class GroupsView extends AppCompatActivity {
     private ArrayList<Groups> grupos;
     private ImageView atras;
     private ImageView agregar;
+    private ImageView home;
+    private ImageView recents;
+    private ImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_view);
 
+        home = findViewById(R.id.imgCasa);
+        recents = findViewById(R.id.imgRecientes);
+        profile = findViewById(R.id.imgPerfil);
         atras = findViewById(R.id.imgAtras);
         agregar = findViewById(R.id.imgAgregar);
         listView = findViewById(R.id.listview);
@@ -72,6 +78,30 @@ public class GroupsView extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GroupsView.this, Home.class);
+                startActivity(intent);
+            }
+        });
+
+        recents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GroupsView.this, Recents.class);
+                startActivity(intent);
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GroupsView.this, Profile.class);
+                startActivity(intent);
+            }
+        });
     }
     @SuppressLint("Range")
     public ArrayList<Groups> seeGroupsForActivity(String actividadNombre) {
@@ -79,7 +109,7 @@ public class GroupsView extends AppCompatActivity {
         SQLiteDatabase db = this.db.getReadableDatabase();
 
         String query = "SELECT * FROM grupos WHERE actividad_nombre = ?";
-        String[] activityName = new String[]{actividadNombre}; // Arreglar
+        String[] activityName = new String[]{actividadNombre};
         Cursor cursor = db.rawQuery(query, activityName);
 
         while (cursor.moveToNext()) {

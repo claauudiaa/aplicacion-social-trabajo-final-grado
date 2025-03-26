@@ -19,12 +19,18 @@ public class Home extends AppCompatActivity {
     private ArrayList<Activities[]> actividadesEnPares;
     private AdapterActivities adapter;
     private ListView listView;
+    private ImageView home;
+    private ImageView recents;
+    private ImageView profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        home = findViewById(R.id.imgCasa);
+        recents = findViewById(R.id.imgRecientes);
+        profile = findViewById(R.id.imgPerfil);
         listView = findViewById(R.id.listview);
         db = new dbConnection(this, "PlanMatch", null, 1);
 
@@ -70,6 +76,30 @@ public class Home extends AppCompatActivity {
                     Intent intent = new Intent(Home.this, GroupsView.class);
                     intent.putExtra("activity_name", act2.getNombre());
                     startActivity(intent);
+                });
+
+                home.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Home.this, Home.class);
+                        startActivity(intent);
+                    }
+                });
+
+                recents.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Home.this, Recents.class);
+                        startActivity(intent);
+                    }
+                });
+
+                profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Home.this, Profile.class);
+                        startActivity(intent);
+                    }
                 });
             }
         };
