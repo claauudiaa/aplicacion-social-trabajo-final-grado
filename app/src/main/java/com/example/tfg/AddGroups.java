@@ -79,7 +79,7 @@ public class AddGroups extends AppCompatActivity {
         recents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddGroups.this, Recents.class);
+                Intent intent = new Intent(AddGroups.this, GroupsRecent.class);
                 startActivity(intent);
             }
         });

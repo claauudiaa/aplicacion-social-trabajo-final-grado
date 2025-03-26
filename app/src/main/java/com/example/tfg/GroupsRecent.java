@@ -10,19 +10,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-public class GroupsView extends AppCompatActivity {
+public class GroupsRecent extends AppCompatActivity {
 
     private dbConnection db;
-    private AdapterGroups adapter;
+    private AdapterRecents adapter;
     private ListView listView;
-    private ArrayList<Groups> grupos;
+    private ArrayList<Groups> myGroups;
     private ImageView atras;
-    private ImageView agregar;
     private ImageView home;
     private ImageView recents;
     private ImageView profile;
@@ -30,44 +30,41 @@ public class GroupsView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_groups_view);
+        setContentView(R.layout.activity_groups_recents);
 
         home = findViewById(R.id.imgCasa);
         recents = findViewById(R.id.imgRecientes);
         profile = findViewById(R.id.imgPerfil);
         atras = findViewById(R.id.imgAtras);
-        agregar = findViewById(R.id.imgAgregar);
         listView = findViewById(R.id.listview);
+
         db = new dbConnection(this, "PlanMatch", null, 1);
-        String activityName = getIntent().getStringExtra("activity_name");
+        myGroups = seeMyGroups(UserSession.correo);
 
-        db.addGroups();
-        grupos = seeGroupsForActivity(activityName);
-
-        // Hemos puesto el de activities porque el de groups daba error
-        adapter = new AdapterGroups(this, R.layout.item_groups, grupos) {
+        adapter = new AdapterRecents(this, R.layout.item_recents, myGroups) {
             @Override
             public void onEntrada(Object entrada, View view) {
                 TextView zona = view.findViewById(R.id.txtZona);
                 TextView fecha = view.findViewById(R.id.txtDia);
                 TextView horario = view.findViewById(R.id.txtHora);
-                TextView unete = view.findViewById(R.id.txtBoton);
+                TextView salir = view.findViewById(R.id.txtBoton);
 
                 zona.setText(((Groups) entrada).getZona());
                 fecha.setText(((Groups) entrada).getFecha());
                 horario.setText(((Groups) entrada).getHorario());
 
-                unete.setOnClickListener(new View.OnClickListener() {
+                salir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         String txtZona = zona.getText().toString();
                         String txtFecha = fecha.getText().toString();
                         String txtHora = horario.getText().toString();
 
-                        db.addToGroup(UserSession.correo, txtZona, txtFecha, txtHora);
-                        Log.d("UNION", "Correo: " + UserSession.correo + ", zona: " + txtZona + ", fecha: " + txtFecha + ", hora: " + txtHora);
+                        db.deleteGroup(UserSession.correo, txtZona, txtFecha, txtHora);
+                        Toast.makeText(GroupsRecent.this, "Has salido del grupo", Toast.LENGTH_SHORT).show();
 
-                        unete.setText("Unido");
+                        myGroups.remove(entrada);
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -77,17 +74,7 @@ public class GroupsView extends AppCompatActivity {
         atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupsView.this, Home.class);
-                startActivity(intent);
-            }
-        });
-
-
-        agregar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GroupsView.this, AddGroups.class);
-                intent.putExtra("activity_name", activityName);
+                Intent intent = new Intent(GroupsRecent.this, Home.class);
                 startActivity(intent);
             }
         });
@@ -95,7 +82,7 @@ public class GroupsView extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupsView.this, Home.class);
+                Intent intent = new Intent(GroupsRecent.this, Home.class);
                 startActivity(intent);
             }
         });
@@ -103,7 +90,7 @@ public class GroupsView extends AppCompatActivity {
         recents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupsView.this, GroupsRecent.class);
+                Intent intent = new Intent(GroupsRecent.this, GroupsRecent.class);
                 startActivity(intent);
             }
         });
@@ -111,28 +98,36 @@ public class GroupsView extends AppCompatActivity {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GroupsView.this, Profile.class);
+                Intent intent = new Intent(GroupsRecent.this, Profile.class);
                 startActivity(intent);
             }
         });
+
     }
+
     @SuppressLint("Range")
-    public ArrayList<Groups> seeGroupsForActivity(String actividadNombre) {
+    public ArrayList<Groups> seeMyGroups(String correo) {
         ArrayList<Groups> groups = new ArrayList<>();
         SQLiteDatabase db = this.db.getReadableDatabase();
 
-        String query = "SELECT * FROM grupos WHERE actividad_nombre = ?";
-        String[] activityName = new String[]{actividadNombre};
-        Cursor cursor = db.rawQuery(query, activityName);
+        String query = "SELECT grupos.zona, grupos.fecha, grupos.horario " +
+                "FROM usuarios_grupos " +
+                "JOIN usuarios ON usuarios_grupos.usu_correo = usuarios.email " +
+                "JOIN grupos ON usuarios_grupos.gru_zona = grupos.zona " +
+                "WHERE usuarios.email = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{correo});
 
         while (cursor.moveToNext()) {
-             String zona = cursor.getString(cursor.getColumnIndex("zona"));
-             String fecha = cursor.getString(cursor.getColumnIndex("fecha"));
-             String horario = cursor.getString(cursor.getColumnIndex("horario"));
-             String actividad_nombre = cursor.getString(cursor.getColumnIndex("actividad_nombre"));
+            String zona = cursor.getString(cursor.getColumnIndex("zona"));
+            String fecha = cursor.getString(cursor.getColumnIndex("fecha"));
+            String horario = cursor.getString(cursor.getColumnIndex("horario"));
 
-             groups.add(new Groups(zona, fecha, horario, actividad_nombre));
+            groups.add(new Groups(zona, fecha, horario, ""));
         }
+
+        cursor.close();
         return groups;
     }
+
 }

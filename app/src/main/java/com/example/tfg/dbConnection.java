@@ -23,6 +23,11 @@ public class dbConnection extends SQLiteOpenHelper {
     private static String horario = "horario";
     private static String fecha = "fecha";
     private static String nameActividad = "actividad_nombre";
+    private static String usu_correo = "usu_correo";
+    private static String gru_zona = "gru_zona";
+    private static String gru_fecha = "gru_fecha";
+    private static String gru_hora = "gru_hora";
+
     private static ArrayList<Activities> activities;
     private static ArrayList<Groups> groups;
 
@@ -41,6 +46,8 @@ public class dbConnection extends SQLiteOpenHelper {
         String queryGrupos = "create table grupos(" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + zona + " TEXT, " + horario + " TEXT, " + fecha + " TEXT, " + nameActividad + " TEXT)";
         sqLiteDatabase.execSQL(queryGrupos);
 
+        String queryGruposUsuarios = "create table usuarios_grupos(" + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + usu_correo + " TEXT, " + gru_zona + " TEXT, " + gru_fecha + " TEXT, " + gru_hora + " TEXT)";
+        sqLiteDatabase.execSQL(queryGruposUsuarios);
     }
 
     @Override
@@ -48,6 +55,7 @@ public class dbConnection extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS usuarios");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS actividades");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS grupos");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS usuarios_grupos");
         onCreate(sqLiteDatabase);
 
     }
@@ -162,7 +170,6 @@ public class dbConnection extends SQLiteOpenHelper {
         values.put(horario, Phorario);
         values.put(nameActividad, Pactividad);
         db.insert("grupos", null, values);
-
     }
 
     public void modifyProfile(String nombre, String email, String password, String emailAnterior) {
@@ -171,5 +178,39 @@ public class dbConnection extends SQLiteOpenHelper {
         db.execSQL(query, new Object[]{nombre, email, password, emailAnterior});
     }
 
-}
+    public void modifyPassword(String password, String correo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE usuarios SET password = ? WHERE email = ?";
+        db.execSQL(query, new Object[]{password, correo});
+    }
 
+    public void addToGroup(String correo, String zona, String fecha, String hora) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(usu_correo, correo);
+        values.put(gru_zona, zona);
+        values.put(gru_fecha, fecha);
+        values.put(gru_hora, hora);
+        db.insert("usuarios_grupos", null, values);
+    }
+
+    @SuppressLint("Range")
+    public void deleteGroup(String correo, String zona, String fecha, String hora) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("usuarios_grupos", "usu_correo = ? AND gru_zona = ? AND gru_fecha = ? AND gru_hora = ?", new String[]{correo, zona, fecha, hora});
+
+        // Log para comprobar si se borró
+        Cursor cursor = db.rawQuery("SELECT * FROM usuarios_grupos WHERE usu_correo = ?", new String[]{correo});
+        Log.d("DELETE_GROUP", "Grupos del usuario tras borrar:");
+
+        while (cursor.moveToNext()) {
+            String z = cursor.getString(cursor.getColumnIndex("gru_zona"));
+            String f = cursor.getString(cursor.getColumnIndex("gru_fecha"));
+            String h = cursor.getString(cursor.getColumnIndex("gru_hora"));
+
+            Log.d("DELETE_GROUP", "- Zona: " + z + ", Fecha: " + f + ", Hora: " + h);
+        }
+        cursor.close();
+    }
+
+}
