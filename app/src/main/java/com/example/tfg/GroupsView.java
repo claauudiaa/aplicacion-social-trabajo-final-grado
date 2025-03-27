@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -65,9 +68,21 @@ public class GroupsView extends AppCompatActivity {
                         String txtHora = horario.getText().toString();
 
                         db.addToGroup(UserSession.correo, txtZona, txtFecha, txtHora);
-                        Log.d("UNION", "Correo: " + UserSession.correo + ", zona: " + txtZona + ", fecha: " + txtFecha + ", hora: " + txtHora);
 
                         unete.setText("Unido");
+                        String asunto = "Bienvenido al grupo de " + activityName;
+                        String contenido = "Hola!\n\nGracias por unirte al grupo de " + activityName + ".\n\n"
+                                + "📍 Zona: " + txtZona + "\n📅 Fecha: " + txtFecha + "\n🕐 Hora: " + txtHora + "\n\n"
+                                + "¡Te esperamos con ganas! 🎉";
+
+                        if (correoValido(UserSession.correo)) {
+                            MailSender.enviarCorreo(UserSession.correo, asunto, contenido);
+                            Toast.makeText(GroupsView.this, "Correo enviado", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GroupsView.this, "Correo no válido", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     }
                 });
             }
@@ -134,5 +149,10 @@ public class GroupsView extends AppCompatActivity {
              groups.add(new Groups(zona, fecha, horario, actividad_nombre));
         }
         return groups;
+    }
+
+    public boolean correoValido(String correo) {
+        return !TextUtils.isEmpty(correo) && Patterns.EMAIL_ADDRESS.matcher(correo).matches() &&
+                (correo.endsWith(".com") || correo.endsWith(".es"));
     }
 }
